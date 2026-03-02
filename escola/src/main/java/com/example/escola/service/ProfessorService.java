@@ -5,10 +5,11 @@ import com.example.escola.dto.professor.ProfessorRespostaDTO;
 import com.example.escola.mapper.ProfessorMapper;
 import com.example.escola.model.Professor;
 import com.example.escola.repository.ProfessorRepository;
+import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-
+@Service
 public class ProfessorService {
 
     private final ProfessorRepository professorRepository;
@@ -20,7 +21,7 @@ public class ProfessorService {
         this.professorMapper = professorMapper;
     }
 
-    public ProfessorRespostaDTO createAluno(ProfessorRequiscaoDTO professorRequiscaoDTO) throws SQLException {
+    public ProfessorRespostaDTO create(ProfessorRequiscaoDTO professorRequiscaoDTO) throws SQLException {
 
         Professor professor = professorMapper.paraEntidade(professorRequiscaoDTO);
         Professor salvo = professorRepository.create(professor);

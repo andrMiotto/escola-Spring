@@ -3,11 +3,12 @@ package com.example.escola.repository;
 import com.example.escola.model.Aluno;
 import com.example.escola.model.Professor;
 import com.example.escola.util.Conexao;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Repository
 public class ProfessorRepository {
 
     public Professor create(Professor professor) throws SQLException {

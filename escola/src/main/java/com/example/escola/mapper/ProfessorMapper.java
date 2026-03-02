@@ -6,7 +6,9 @@ import com.example.escola.dto.professor.ProfessorRequiscaoDTO;
 import com.example.escola.dto.professor.ProfessorRespostaDTO;
 import com.example.escola.model.Aluno;
 import com.example.escola.model.Professor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProfessorMapper {
 
     public Professor paraEntidade(ProfessorRequiscaoDTO professorRequiscaoDTO) {
