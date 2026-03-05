@@ -5,6 +5,7 @@ import com.example.escola.dto.professor.ProfessorRespostaDTO;
 import com.example.escola.dto.turma.TurmaRequisicaoDTO;
 import com.example.escola.dto.turma.TurmaRespostaDTO;
 import com.example.escola.service.TurmaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class TurmaController {
     }
 
     @PostMapping
-    public TurmaRespostaDTO create(@RequestBody TurmaRequisicaoDTO turmaRequisicaoDTO) throws SQLException {
+    public TurmaRespostaDTO create(@Valid @RequestBody TurmaRequisicaoDTO turmaRequisicaoDTO) throws SQLException {
         return turmaService.create(turmaRequisicaoDTO);
 
     }
@@ -41,7 +42,7 @@ public class TurmaController {
     }
 
     @PutMapping("/atualizar/{id}")
-    public TurmaRespostaDTO update(@RequestBody TurmaRequisicaoDTO turmaRequisicaoDTO, @PathVariable("id")int id)throws SQLException{
+    public TurmaRespostaDTO update(@Valid @RequestBody TurmaRequisicaoDTO turmaRequisicaoDTO, @PathVariable("id")int id)throws SQLException{
         return turmaService.update(turmaRequisicaoDTO, id);
     }
 

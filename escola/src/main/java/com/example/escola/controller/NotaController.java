@@ -5,6 +5,7 @@ import com.example.escola.dto.nota.NotaRespostaDTO;
 import com.example.escola.dto.professor.ProfessorRequiscaoDTO;
 import com.example.escola.dto.professor.ProfessorRespostaDTO;
 import com.example.escola.service.NotaService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class NotaController {
 
 
     @PostMapping
-    public NotaRespostaDTO create(@RequestBody NotaRequisicaoDTO notaRequisicaoDTO) throws SQLException {
+    public NotaRespostaDTO create(@Valid @RequestBody NotaRequisicaoDTO notaRequisicaoDTO) throws SQLException {
         return notaService.create(notaRequisicaoDTO);
 
     }
@@ -41,7 +42,7 @@ public class NotaController {
     }
 
     @PutMapping("/atualizar/{id}")
-    public NotaRespostaDTO update(@RequestBody NotaRequisicaoDTO notaRequisicaoDTO, @PathVariable("id")int id)throws SQLException{
+    public NotaRespostaDTO update(@Valid @RequestBody NotaRequisicaoDTO notaRequisicaoDTO, @PathVariable("id")int id)throws SQLException{
         return notaService.update(notaRequisicaoDTO, id);
     }
 
