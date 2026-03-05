@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 @Repository
 public class NotaRepository {
 
@@ -20,9 +21,9 @@ public class NotaRepository {
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1,nota.getAluno_id());
-            stmt.setInt(2,nota.getAula_id());
-            stmt.setDouble(3,nota.getValor());
+            stmt.setInt(1, nota.getAluno_id());
+            stmt.setInt(2, nota.getAula_id());
+            stmt.setDouble(3, nota.getValor());
 
             stmt.executeUpdate();
 
@@ -54,7 +55,7 @@ public class NotaRepository {
                 Double valor = rs.getDouble("valor");
 
 
-                Nota nota = new Nota(id, aluno_id,aula_id,valor);
+                Nota nota = new Nota(id, aluno_id, aula_id, valor);
                 notas.add(nota);
             }
         }
@@ -79,7 +80,7 @@ public class NotaRepository {
                 id = rs.getInt("id");
 
 
-                return new Nota(id, aluno_id,aula_id,valor);
+                return new Nota(id, aluno_id, aula_id, valor);
             }
         }
         return null;
@@ -107,9 +108,9 @@ public class NotaRepository {
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
 
-            stmt.setInt(1,nota.getAluno_id());
-            stmt.setInt(2,nota.getAula_id());
-            stmt.setDouble(3,nota.getValor());
+            stmt.setInt(1, nota.getAluno_id());
+            stmt.setInt(2, nota.getAula_id());
+            stmt.setDouble(3, nota.getValor());
 
 
             stmt.executeUpdate();
@@ -118,4 +119,45 @@ public class NotaRepository {
 
         return nota;
     }
+
+
+    public String findAlunoById(long alunoId) throws SQLException {
+
+        String query = "SELECT nome FROM aluno WHERE id = ?;";
+
+        try (Connection connection = Conexao.conectar();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setLong(1, alunoId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nome");
+                }
+            }
+        }
+        return "Aluno nao encontrado";
+    }
+
+
+    public String findAssuntoById(long assuntoId) throws SQLException {
+
+        String query = "SELECT assunto FROM aula WHERE id = ?";
+
+        try (Connection connection = Conexao.conectar();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setLong(1, assuntoId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("assunto");
+                }
+            }
+        }
+        return "Assunto nao encontrado";
+    }
+
+
+
 }

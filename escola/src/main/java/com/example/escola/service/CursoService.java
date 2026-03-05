@@ -34,7 +34,9 @@ public class CursoService {
         Curso curso = cursoMapper.paraEntidade(cursoRequisicaoDTO);
         Curso salvo = cursoRepository.create(curso);
 
-        return cursoMapper.paraRespostaDTO(salvo);
+        List<String> professores = cursoRepository.findProfessorByCursoID(salvo.getId());
+
+        return cursoMapper.paraRespostaDTO(salvo, professores);
 
 
     }
@@ -43,14 +45,24 @@ public class CursoService {
         List<Curso> cursos = cursoRepository.listAll();
 
         return cursos.stream()
-                .map(cursoMapper::paraRespostaDTO)
+                .map(curso -> {
+                    try {
+                        List<String> professores = cursoRepository.findProfessorByCursoID(curso.getId());
+                        return cursoMapper.paraRespostaDTO(curso, professores);
+                    } catch (SQLException e) {
+                        throw new RuntimeException("Erro ao buscar professores do curso: " + curso.getId());
+                    }
+                })
                 .toList();
     }
 
 
     public CursoRespostaDTO listId(int id) throws SQLException {
-        Curso curso =cursoRepository.listId(id);
-        return cursoMapper.paraRespostaDTO(curso);
+        Curso curso = cursoRepository.listId(id);
+        List<String> professores = cursoRepository.findProfessorByCursoID(curso.getId());
+
+
+        return cursoMapper.paraRespostaDTO(curso, professores);
     }
 
     public void delete(int id) throws SQLException {
@@ -63,7 +75,9 @@ public class CursoService {
         curso.setId(id);
 
         Curso salvo = cursoRepository.update(curso, curso.getId());
-        return cursoMapper.paraRespostaDTO(salvo);
+        List<String> professores = cursoRepository.findProfessorByCursoID(curso.getId());
+
+        return cursoMapper.paraRespostaDTO(salvo,professores);
     }
 
 }

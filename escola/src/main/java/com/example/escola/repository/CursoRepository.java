@@ -120,7 +120,27 @@ public class CursoRepository {
     }
 
 
+    public List<String> findProfessorByCursoID(long cursoID) throws SQLException {
+        String query = "SELECT DISTINCT p.nome FROM professor p INNER JOIN turma t ON p.id = t.professor_id WHERE t.curso_id = ?";
 
+        List<String> nomes = new ArrayList<>();
+
+        try (Connection connection = Conexao.conectar();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setLong(1, cursoID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    nomes.add(rs.getString("nome"));
+                }
+
+            }
+        }
+
+        return nomes;
+
+    }
 
 
 }

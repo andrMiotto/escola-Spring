@@ -28,7 +28,10 @@ public class NotaService {
         Nota nota = notaMapper.paraEntidade(notaRequisicaoDTO);
         Nota salvo = notaRepository.create(nota);
 
-        return notaMapper.paraRespostaDTO(salvo);
+        String nomeAluno = notaRepository.findAlunoById(salvo.getAluno_id());
+        String assuntoAula = notaRepository.findAssuntoById(salvo.getAula_id());
+
+        return notaMapper.paraRespostaDTO(salvo, nomeAluno, assuntoAula);
 
 
     }
@@ -37,14 +40,26 @@ public class NotaService {
         List<Nota> notas = notaRepository.listAll();
 
         return notas.stream()
-                .map(notaMapper::paraRespostaDTO)
+                .map(nota -> {
+                    try {
+                        String nomeAluno = notaRepository.findAlunoById(nota.getAluno_id());
+                        String assuntoAula = notaRepository.findAssuntoById(nota.getAula_id());
+                        return notaMapper.paraRespostaDTO(nota, nomeAluno, assuntoAula);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+
                 .toList();
     }
 
 
     public NotaRespostaDTO listId(int id) throws SQLException {
         Nota nota = notaRepository.listId(id);
-        return notaMapper.paraRespostaDTO(nota);
+        String nomeAluno = notaRepository.findAlunoById(nota.getAluno_id());
+        String assuntoAula = notaRepository.findAssuntoById(nota.getAula_id());
+
+        return notaMapper.paraRespostaDTO(nota, nomeAluno, assuntoAula);
     }
 
     public void delete(int id) throws SQLException {
@@ -57,7 +72,10 @@ public class NotaService {
         nota.setId(id);
 
         Nota salvo = notaRepository.update(nota, nota.getId());
-        return notaMapper.paraRespostaDTO(salvo);
+        String nomeAluno = notaRepository.findAlunoById(nota.getAluno_id());
+        String assuntoAula = notaRepository.findAssuntoById(nota.getAula_id());
+
+        return notaMapper.paraRespostaDTO(salvo, nomeAluno, assuntoAula);
     }
 
 }

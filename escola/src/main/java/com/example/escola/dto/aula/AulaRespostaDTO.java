@@ -6,7 +6,8 @@ public record AulaRespostaDTO(
         int id,
         int turma_id,
         Date data_hora,
-        String assunto
+        String assunto,
+        String nomeTurma
 
 ) {
 }

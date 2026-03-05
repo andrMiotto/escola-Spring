@@ -29,7 +29,9 @@ public class AulaService {
         Aula aula = aulaMapper.paraEntidade(aulaRequisicaoDTO);
         Aula salvo = aulaRepository.create(aula);
 
-        return aulaMapper.paraRespostaDTO(salvo);
+        String nomeTurma = aulaRepository.findTurmaById(salvo.getTurma_id());
+
+        return aulaMapper.paraRespostaDTO(salvo, nomeTurma);
 
 
     }
@@ -38,14 +40,26 @@ public class AulaService {
         List<Aula> aulas = aulaRepository.listAll();
 
         return aulas.stream()
-                .map(aulaMapper::paraRespostaDTO)
+                .map(aula -> {
+                    try {
+                        String nomeTurma = aulaRepository.findTurmaById(aula.getTurma_id());
+                        return aulaMapper.paraRespostaDTO(aula, nomeTurma);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                })
+
                 .toList();
     }
 
 
     public AulaRespostaDTO listId(int id) throws SQLException {
         Aula aula = aulaRepository.listId(id);
-        return aulaMapper.paraRespostaDTO(aula);
+        String nomeTurma = aulaRepository.findTurmaById(aula.getTurma_id());
+
+
+        return aulaMapper.paraRespostaDTO(aula, nomeTurma);
 
 
     }
@@ -60,6 +74,8 @@ public class AulaService {
         aula.setId(id);
 
         Aula salvo = aulaRepository.update(aula, aula.getId());
-        return aulaMapper.paraRespostaDTO(salvo);
+        String nomeTurma = aulaRepository.findTurmaById(aula.getTurma_id());
+
+        return aulaMapper.paraRespostaDTO(salvo, nomeTurma);
     }
 }

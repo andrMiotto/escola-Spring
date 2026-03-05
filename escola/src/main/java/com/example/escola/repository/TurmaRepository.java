@@ -40,7 +40,7 @@ public class TurmaRepository {
     public List<Turma> listAll() throws SQLException {
         List<Turma> turmas = new ArrayList<>();
 
-        String query = "SELECT nome, curso_id, professor_id FROM turma";
+        String query = "SELECT id,nome, curso_id, professor_id FROM turma";
 
         try (Connection connection = Conexao.conectar();
              PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -77,7 +77,7 @@ public class TurmaRepository {
                 int curso_id = rs.getInt("curso_id");
                 int professor_id = rs.getInt("professor_id");
 
-                return new Turma(id, nome, curso_id,professor_id);
+                return new Turma(id, nome, curso_id, professor_id);
             }
         }
         return null;
@@ -119,7 +119,27 @@ public class TurmaRepository {
     }
 
 
+    public List<String> findNomesById(long turmaId) throws SQLException {
+        String query = "SELECT a.nome FROM aluno a INNER JOIN turma_aluno ta ON a.id = ta.aluno_id WHERE ta.turma_id = ?;";
+
+        List<String> nomes = new ArrayList<>();
 
 
+        try (Connection connection = Conexao.conectar();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
 
+            stmt.setLong(1, turmaId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    nomes.add(rs.getString("nome"));
+                }
+
+            }
+        }
+
+        return nomes;
+
+
+    }
 }

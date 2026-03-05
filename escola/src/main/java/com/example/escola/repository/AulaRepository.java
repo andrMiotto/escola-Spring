@@ -55,7 +55,7 @@ public class AulaRepository {
                 String assunto = rs.getString("assunto");
 
 
-                Aula aula = new Aula(id, turma_id, data_hora,assunto);
+                Aula aula = new Aula(id, turma_id, data_hora, assunto);
                 aulas.add(aula);
             }
         }
@@ -80,7 +80,7 @@ public class AulaRepository {
                 id = rs.getInt("id");
 
 
-                return new Aula(id, turma_id, data_hora,assunto);
+                return new Aula(id, turma_id, data_hora, assunto);
             }
         }
         return null;
@@ -118,6 +118,28 @@ public class AulaRepository {
 
 
         return aula;
+    }
+
+
+    public String findTurmaById(long idAula) throws SQLException {
+        String query = "SELECT nome FROM turma WHERE id = ?";
+
+        try (Connection connection = Conexao.conectar();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setLong(1, idAula);
+
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("nome");
+                }
+
+            }
+        }
+
+
+        return "Turma nao encontrada";
     }
 
 

@@ -5,6 +5,8 @@ import com.example.escola.dto.curso.CursoRespostaDTO;
 import com.example.escola.model.Curso;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class CursoMapper {
 
@@ -15,8 +17,9 @@ public class CursoMapper {
     }
 
 
-    public CursoRespostaDTO paraRespostaDTO(Curso curso) {
-        return new CursoRespostaDTO(curso.getId(), curso.getNome(), curso.getCodigo());
+    public CursoRespostaDTO paraRespostaDTO(Curso curso, List<String> nomesProfessores) {
+
+        return new CursoRespostaDTO(curso.getId(), curso.getNome(), curso.getCodigo(),nomesProfessores);
 
     }
 

@@ -15,8 +15,8 @@ public class AulaMapper {
 
     }
 
-    public AulaRespostaDTO paraRespostaDTO(Aula aula){
-        return new AulaRespostaDTO(aula.getId(), aula.getTurma_id(),aula.getData_hora(), aula.getAssunto());
+    public AulaRespostaDTO paraRespostaDTO(Aula aula, String nomeAula){
+        return new AulaRespostaDTO(aula.getId(), aula.getTurma_id(),aula.getData_hora(), aula.getAssunto(),nomeAula);
     }
 
 

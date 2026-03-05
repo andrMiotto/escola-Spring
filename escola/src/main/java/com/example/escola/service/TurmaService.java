@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class TurmaService {
 
@@ -29,8 +32,9 @@ public class TurmaService {
 
         Turma turma = turmaMapper.paraEntidade(turmaRequisicaoDTO);
         Turma salvo = turmaRepository.create(turma);
+        List<String> alunos = turmaRepository.findNomesById(salvo.getId());
 
-        return turmaMapper.paraRespostaDTO(salvo);
+        return turmaMapper.paraRespostaDTO(salvo, alunos);
 
 
     }
@@ -39,14 +43,23 @@ public class TurmaService {
         List<Turma> turmas = turmaRepository.listAll();
 
         return turmas.stream()
-                .map(turmaMapper::paraRespostaDTO)
+                .map(turma -> {
+                    try {
+                        List<String> alunos = turmaRepository.findNomesById(turma.getId());
+                        return turmaMapper.paraRespostaDTO(turma, alunos);
+                    } catch (SQLException e) {
+                        throw new RuntimeException("Erro ao buscar professores do curso: " + turma.getId());
+                    }
+                })
                 .toList();
     }
 
 
     public TurmaRespostaDTO listId(int id) throws SQLException {
         Turma turma = turmaRepository.listId(id);
-        return turmaMapper.paraRespostaDTO(turma);
+        List<String> alunos = turmaRepository.findNomesById(turma.getId());
+
+        return turmaMapper.paraRespostaDTO(turma, alunos);
     }
 
     public void delete(int id) throws SQLException {
@@ -59,7 +72,9 @@ public class TurmaService {
         turma.setId(id);
 
         Turma salvo = turmaRepository.update(turma, turma.getId());
-        return turmaMapper.paraRespostaDTO(salvo);
+        List<String> alunos = turmaRepository.findNomesById(turma.getId());
+
+        return turmaMapper.paraRespostaDTO(salvo, alunos);
     }
 
 }

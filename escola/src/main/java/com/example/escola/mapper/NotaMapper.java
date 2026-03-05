@@ -16,9 +16,9 @@ public class NotaMapper {
     }
 
 
-    public NotaRespostaDTO paraRespostaDTO(Nota nota) {
+    public NotaRespostaDTO paraRespostaDTO(Nota nota,String nomeAluno,String assuntoAula) {
 
-        return new NotaRespostaDTO(nota.getId(), nota.getAluno_id(), nota.getAula_id(), nota.getValor());
+        return new NotaRespostaDTO(nota.getId(), nota.getAluno_id(), nota.getAula_id(), nota.getValor(),nomeAluno,assuntoAula);
 
     }
 
